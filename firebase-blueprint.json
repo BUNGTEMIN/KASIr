@@ -1,0 +1,69 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "A product available for sale in the POS system.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Name of the product" },
+        "price": { "type": "number", "description": "Unit price of the product" },
+        "stock": { "type": "integer", "description": "Current stock quantity" },
+        "category": { "type": "string", "description": "Category name or ID" },
+        "imageUrl": { "type": "string", "format": "uri", "description": "URL to product image" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "price", "stock"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "A sale record.",
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "productId": { "type": "string" },
+              "name": { "type": "string" },
+              "price": { "type": "number" },
+              "quantity": { "type": "integer" }
+            }
+          }
+        },
+        "totalAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["cash", "qris", "card"] },
+        "status": { "type": "string", "enum": ["paid", "refunded"] },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["items", "totalAmount", "paymentMethod", "status", "userId", "createdAt"]
+    },
+    "User": {
+      "title": "User",
+      "description": "Application user profile.",
+      "type": "object",
+      "properties": {
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "cashier"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Collection of products."
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Collection of sale transactions."
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile information."
+    }
+  }
+}
